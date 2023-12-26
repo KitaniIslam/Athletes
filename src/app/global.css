@@ -1,0 +1,14 @@
+*,
+html {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+html {
+  font-family: var(--font-lato);
+
+}
+
+h1 {
+  font-family: var(--font-schabo);
+}
