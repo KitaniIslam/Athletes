@@ -15,6 +15,7 @@ const Hero = () => {
               fontSize: "calc(max(6vw, 60px))",
               maxWidth: "20ch",
               margin: 0,
+              letterSpacing: "3px",
             }}
           >
             WE CONNECT{" "}

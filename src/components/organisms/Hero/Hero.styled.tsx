@@ -4,7 +4,7 @@ import HeroImage from "../../../../public/HomeImage.png";
 
 export const HeroContainer = styled.div`
   background-color: ${theme.colors.black[100]};
-  width: 75vw;
+  width: calc(max(75vw, 370px));
   border-radius: 50px 50px 120px 120px;
   color: ${theme.colors.white[100]};
   margin: 20px auto 0 auto;
