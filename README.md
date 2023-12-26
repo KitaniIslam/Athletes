@@ -2,4 +2,4 @@
 
 ## WE CONNECT ATHLETES AROUND THE WORLD
 
-![SpotMe thumbnail](https://github.com/KitaniIslam/Athletes/public/ThumbnailStandard.png)
+![SpotMe thumbnail](https://github.com/KitaniIslam/Athletes/tree/main/public/ThumbnailStandard.png)
