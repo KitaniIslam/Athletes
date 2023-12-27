@@ -1,15 +1,44 @@
 "use client";
 import Logo from "@assets/SVG/Logo.svg";
-import { Button, Typography } from "antd";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { NavbarContainer } from "./Navbar.styled";
+import { Icon } from "@components/atoms";
 import { theme } from "@theme/index";
+import { Button, Dropdown, Space, theme as antdTheme } from "antd";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { NavbarContainer } from "./Navbar.styled";
 
-const { Text } = Typography;
-
+const { useToken } = antdTheme;
 const Navbar = () => {
   const router = useRouter();
+  const { token } = useToken();
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    const darkModeMediaQuery = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    );
+
+    const handleDarkModeChange = (event: any) => {
+      setIsDarkMode(event.matches);
+    };
+
+    darkModeMediaQuery.addEventListener("change", handleDarkModeChange);
+    setIsDarkMode(darkModeMediaQuery.matches);
+
+    return () => {
+      darkModeMediaQuery.removeEventListener("change", handleDarkModeChange);
+    };
+  }, []);
+
+  const contentStyle: React.CSSProperties = {
+    backgroundColor: theme.colors.black[90],
+    borderRadius: "20px 20px 45px 45px",
+    boxShadow: token.boxShadowSecondary,
+    width: "250px",
+    paddingTop: 10,
+  };
+
   return (
     <div>
       <NavbarContainer>
@@ -31,37 +60,144 @@ const Navbar = () => {
             textAlign: "center",
           }}
         >
-          <Image
-            src={Logo}
-            width={30}
-            height={30}
+          <Logo
+            width={40}
             alt="Picture of the author"
             onClick={() => router.push("/")}
             style={{ cursor: "pointer" }}
+            color={theme.colors.primary[100]}
           />
         </div>
-        <div style={{ marginRight: "70px" }}>
-          <Button
-            type="link"
-            onClick={() => router.push("/about")}
-            style={{ color: theme.colors.white[100] }}
+        <div
+          style={{
+            marginRight: "70px",
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <Dropdown
+            placement="bottomRight"
+            autoAdjustOverflow
+            dropdownRender={() => (
+              <div style={contentStyle}>
+                <Space>
+                  <button
+                    style={{
+                      margin: "0 15px 0 15px",
+                      backgroundColor: theme.colors.black[90],
+                      padding: 15,
+                      width: 220,
+                      height: 60,
+                      borderRadius: 100,
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      color: theme.colors.white[100],
+                      border: 0,
+                      cursor: "pointer",
+                    }}
+                  >
+                    <div style={{ marginRight: 10 }}>
+                      <Icon
+                        name="LogoOutline"
+                        color={theme.colors.white[100]}
+                      />
+                    </div>
+                    <Link
+                      href="/about"
+                      style={{ color: theme.colors.white[100] }}
+                    >
+                      ABOUT
+                    </Link>
+                  </button>
+                </Space>
+                <Space>
+                  <button
+                    style={{
+                      margin: "0 15px 0 15px",
+                      backgroundColor: theme.colors.black[90],
+                      padding: 15,
+                      width: 220,
+                      height: 60,
+                      borderRadius: 100,
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      color: theme.colors.white[100],
+                      border: 0,
+                      cursor: "pointer",
+                    }}
+                  >
+                    <div style={{ marginRight: 10 }}>
+                      <Icon name="Mail" color={theme.colors.white[100]} />
+                    </div>
+                    <Link href="/" style={{ color: theme.colors.white[100] }}>
+                      CONTACT
+                    </Link>
+                  </button>
+                </Space>
+                <Space>
+                  <button
+                    style={{
+                      margin: "0 15px 0 15px",
+                      backgroundColor: theme.colors.black[90],
+                      padding: 15,
+                      width: 220,
+                      height: 60,
+                      borderRadius: 100,
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      color: theme.colors.white[100],
+                      border: 0,
+                      cursor: "pointer",
+                    }}
+                  >
+                    <div style={{ marginRight: 10 }}>
+                      <Icon name="LogIn" color={theme.colors.white[100]} />
+                    </div>
+                    <Link href="/" style={{ color: theme.colors.white[100] }}>
+                      REGISTER
+                    </Link>
+                  </button>
+                </Space>
+                <Space>
+                  <button
+                    style={{
+                      margin: "0 15px 15px 15px",
+                      backgroundColor: theme.colors.black[80],
+                      padding: 15,
+                      width: 220,
+                      height: 60,
+                      borderRadius: 100,
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      color: theme.colors.white[100],
+                      border: 0,
+                      cursor: "pointer",
+                    }}
+                    onClick={() => setIsDarkMode(!isDarkMode)}
+                  >
+                    <div style={{ marginRight: 10 }}>
+                      <Icon
+                        name={isDarkMode ? "Sunny" : "Moon"}
+                        color={theme.colors.white[100]}
+                      />
+                    </div>
+                    <p>{isDarkMode ? "Light" : "Dark"}</p>
+                  </button>
+                </Space>
+              </div>
+            )}
           >
-            ABOUT
-          </Button>
-          <Button
-            type="link"
-            onClick={() => router.push("/")}
-            style={{ color: theme.colors.white[100] }}
-          >
-            CONTACT
-          </Button>
-          <Button
-            type="link"
-            onClick={() => router.push("/")}
-            style={{ color: theme.colors.white[100] }}
-          >
-            REGISTER
-          </Button>
+            <a onClick={(e) => e.preventDefault()}>
+              <Space>
+                <Icon name="Menu" color={theme.colors.white[100]} />
+              </Space>
+            </a>
+          </Dropdown>
         </div>
       </NavbarContainer>
     </div>
@@ -69,3 +205,5 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+// TODO: Refactoring this component
