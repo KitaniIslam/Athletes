@@ -10,6 +10,8 @@ export const theme = {
   colors: {
     black: {
       100: "#000000",
+      90: "#1E1E1E",
+      80: "#2C2C2C",
     },
     white: {
       100: "#ffffff",

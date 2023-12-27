@@ -13,3 +13,7 @@ html {
 h1 {
   font-family: var(--font-schabo);
 }
+
+p {
+  margin: 0;
+}
