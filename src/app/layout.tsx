@@ -1,10 +1,10 @@
 import { Navbar } from "@components/molecules";
+import AntDComponentsRegistry from "@lib/AntDRegistry";
+import StyledComponentsRegistry from "@lib/Registry";
 import { ConfigProvider } from "antd";
 import type { Metadata } from "next";
 import { Lato } from "next/font/google";
 import localFont from "next/font/local";
-import AntDComponentsRegistry from "../lib/AntDRegistry";
-import StyledComponentsRegistry from "../lib/Registry";
 
 import { antdTheme } from "../styles";
 import "./global.css";
