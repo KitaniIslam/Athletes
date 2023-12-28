@@ -1,3 +1,4 @@
+import Container from "./Container/Container";
 import Icon from "./Icon/Icon";
 
-export { Icon };
+export { Container, Icon };
