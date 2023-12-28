@@ -1,30 +1,73 @@
 "use client";
 import Logo from "@assets/SVG/Logo.svg";
 import { Icon } from "@components/atoms";
+import { TTheme } from "@customTypes/Types";
+import { NavbarPadding } from "@lib/Consts";
+import { useAppDispatch, useAppSelector } from "@store/index";
+import { setThemeAction } from "@store/slices/theme";
 import { theme } from "@theme/index";
 import { Button, Dropdown, Space, theme as antdTheme } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { NavbarContainer } from "./Navbar.styled";
+import { LogoContainer, MenuButton, NavbarContainer } from "./Navbar.styled";
 
 const { useToken } = antdTheme;
 const Navbar = () => {
   const router = useRouter();
   const { token } = useToken();
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [stystemTheme, setSystemTheme] = useState<TTheme>("dark");
+  const { currentTheme } = useAppSelector((state) => state.themeReducer);
+  const dispatch = useAppDispatch();
+
+  const ChangeCurrentTheme = async () => {
+    const newThemeToApply: TTheme = stystemTheme === "dark" ? "light" : "dark";
+    await localStorage.setItem("theme", newThemeToApply);
+    setSystemTheme(newThemeToApply);
+    dispatch(
+      setThemeAction({
+        currentTheme: newThemeToApply,
+      })
+    );
+  };
 
   useEffect(() => {
     const darkModeMediaQuery = window.matchMedia(
       "(prefers-color-scheme: dark)"
     );
 
-    const handleDarkModeChange = (event: any) => {
-      setIsDarkMode(event.matches);
+    const localTheme = localStorage.getItem("theme") as TTheme;
+
+    if (localTheme !== null) {
+      setSystemTheme(localTheme);
+      dispatch(setThemeAction({ currentTheme: localTheme }));
+    } else {
+      localStorage.setItem(
+        "theme",
+        darkModeMediaQuery.matches ? "dark" : "light"
+      );
+      setSystemTheme(darkModeMediaQuery.matches ? "dark" : "light");
+      dispatch(
+        setThemeAction({
+          currentTheme: darkModeMediaQuery.matches ? "dark" : "light",
+        })
+      );
+    }
+
+    const handleDarkModeChange = () => {
+      localStorage.setItem(
+        "theme",
+        darkModeMediaQuery.matches ? "dark" : "light"
+      );
+      setSystemTheme(darkModeMediaQuery.matches ? "dark" : "light");
+      dispatch(
+        setThemeAction({
+          currentTheme: darkModeMediaQuery.matches ? "dark" : "light",
+        })
+      );
     };
 
     darkModeMediaQuery.addEventListener("change", handleDarkModeChange);
-    setIsDarkMode(darkModeMediaQuery.matches);
 
     return () => {
       darkModeMediaQuery.removeEventListener("change", handleDarkModeChange);
@@ -41,25 +84,19 @@ const Navbar = () => {
 
   return (
     <div>
-      <NavbarContainer>
+      <NavbarContainer isDark={currentTheme === "dark"}>
         <Button
           type="link"
           onClick={() => router.push("/")}
-          style={{ marginLeft: "70px", color: theme.colors.white[100] }}
+          style={{
+            marginLeft: `${NavbarPadding}px`,
+            color:
+              theme.colors[currentTheme === "dark" ? "black" : "white"][100],
+          }}
         >
           SpotMe
         </Button>
-        <div
-          style={{
-            width: "fit-content",
-            position: "absolute",
-            right: 0,
-            left: 0,
-            marginLeft: "auto",
-            marginRight: "auto",
-            textAlign: "center",
-          }}
-        >
+        <LogoContainer>
           <Logo
             width={40}
             alt="Picture of the author"
@@ -67,13 +104,10 @@ const Navbar = () => {
             style={{ cursor: "pointer" }}
             color={theme.colors.primary[100]}
           />
-        </div>
+        </LogoContainer>
         <div
           style={{
-            marginRight: "70px",
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
+            marginRight: `${NavbarPadding}px`,
           }}
         >
           <Dropdown
@@ -82,22 +116,7 @@ const Navbar = () => {
             dropdownRender={() => (
               <div style={contentStyle}>
                 <Space>
-                  <button
-                    style={{
-                      margin: "0 15px 0 15px",
-                      backgroundColor: theme.colors.black[90],
-                      padding: 15,
-                      width: 220,
-                      height: 60,
-                      borderRadius: 100,
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      color: theme.colors.white[100],
-                      border: 0,
-                      cursor: "pointer",
-                    }}
-                  >
+                  <MenuButton>
                     <div style={{ marginRight: 10 }}>
                       <Icon
                         name="LogoOutline"
@@ -110,91 +129,57 @@ const Navbar = () => {
                     >
                       ABOUT
                     </Link>
-                  </button>
+                  </MenuButton>
                 </Space>
                 <Space>
-                  <button
-                    style={{
-                      margin: "0 15px 0 15px",
-                      backgroundColor: theme.colors.black[90],
-                      padding: 15,
-                      width: 220,
-                      height: 60,
-                      borderRadius: 100,
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      color: theme.colors.white[100],
-                      border: 0,
-                      cursor: "pointer",
-                    }}
-                  >
+                  <MenuButton>
                     <div style={{ marginRight: 10 }}>
                       <Icon name="Mail" color={theme.colors.white[100]} />
                     </div>
                     <Link href="/" style={{ color: theme.colors.white[100] }}>
                       CONTACT
                     </Link>
-                  </button>
+                  </MenuButton>
                 </Space>
                 <Space>
-                  <button
-                    style={{
-                      margin: "0 15px 0 15px",
-                      backgroundColor: theme.colors.black[90],
-                      padding: 15,
-                      width: 220,
-                      height: 60,
-                      borderRadius: 100,
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      color: theme.colors.white[100],
-                      border: 0,
-                      cursor: "pointer",
-                    }}
-                  >
+                  <MenuButton>
                     <div style={{ marginRight: 10 }}>
                       <Icon name="LogIn" color={theme.colors.white[100]} />
                     </div>
                     <Link href="/" style={{ color: theme.colors.white[100] }}>
                       REGISTER
                     </Link>
-                  </button>
+                  </MenuButton>
                 </Space>
                 <Space>
-                  <button
-                    style={{
-                      margin: "0 15px 15px 15px",
-                      backgroundColor: theme.colors.black[80],
-                      padding: 15,
-                      width: 220,
-                      height: 60,
-                      borderRadius: 100,
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      color: theme.colors.white[100],
-                      border: 0,
-                      cursor: "pointer",
-                    }}
-                    onClick={() => setIsDarkMode(!isDarkMode)}
+                  <MenuButton
+                    CustomBg={theme.colors.black[80]}
+                    onClick={ChangeCurrentTheme}
+                    pressable
+                    style={{ marginBottom: 15 }}
                   >
                     <div style={{ marginRight: 10 }}>
                       <Icon
-                        name={isDarkMode ? "Sunny" : "Moon"}
+                        name={stystemTheme === "dark" ? "Sunny" : "Moon"}
                         color={theme.colors.white[100]}
                       />
                     </div>
-                    <p>{isDarkMode ? "Light" : "Dark"}</p>
-                  </button>
+                    <p>{stystemTheme === "dark" ? "Light" : "Dark"}</p>
+                  </MenuButton>
                 </Space>
               </div>
             )}
           >
             <a onClick={(e) => e.preventDefault()}>
               <Space>
-                <Icon name="Menu" color={theme.colors.white[100]} />
+                <Icon
+                  name="Menu"
+                  color={
+                    theme.colors[
+                      currentTheme === "dark" ? "black" : "white"
+                    ][100]
+                  }
+                />
               </Space>
             </a>
           </Dropdown>
@@ -205,5 +190,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-// TODO: Refactoring this component

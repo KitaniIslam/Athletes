@@ -2,8 +2,13 @@ import { theme } from "@theme/index";
 import styled from "styled-components";
 import HeroImage from "../../../../public/HomeImage.png";
 
-export const HeroContainer = styled.div`
-  background-color: ${theme.colors.black[100]};
+interface IHeroContainer {
+  isDark: boolean;
+}
+
+export const HeroContainer = styled.div<IHeroContainer>`
+  background-color: ${({ isDark }) =>
+    theme.colors[isDark ? "white" : "black"][100]};
   width: calc(max(75vw, 370px));
   border-radius: 50px 50px 120px 120px;
   color: ${theme.colors.white[100]};

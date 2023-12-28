@@ -1,3 +1,4 @@
+import { useAppSelector } from "@store/index";
 import { theme } from "@theme/index";
 import {
   HeroContainer,
@@ -6,9 +7,10 @@ import {
 } from "./Hero.styled";
 
 const Hero = () => {
+  const { currentTheme } = useAppSelector((state) => state.themeReducer);
   return (
     <div>
-      <HeroContainer>
+      <HeroContainer isDark={currentTheme === "dark"}>
         <HeroContentContainer>
           <h1
             style={{
@@ -16,11 +18,13 @@ const Hero = () => {
               maxWidth: "20ch",
               margin: 0,
               letterSpacing: "3px",
+              color:
+                theme.colors[currentTheme === "dark" ? "black" : "white"][100],
             }}
           >
             WE CONNECT{" "}
             <b style={{ color: theme.colors.primary[100] }}>ATHLETES</b> AROUND
-            THE WORLDD
+            THE WORLD
           </h1>
           <p
             style={{
@@ -28,6 +32,8 @@ const Hero = () => {
               maxWidth: "60ch",
               lineHeight: "normal",
               margin: 0,
+              color:
+                theme.colors[currentTheme === "dark" ? "black" : "white"][100],
             }}
           >
             Lorem Ipsum is simply dummy text of the printing and typesetting
