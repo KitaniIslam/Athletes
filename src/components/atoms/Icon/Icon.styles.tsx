@@ -14,10 +14,11 @@ export const IconContainer = styled.div<IconContainerProps>`
   padding: ${({ pressable, padding }) =>
     typeof padding === "number" ? `${padding}px` : pressable ? "8px" : "0px"};
   ${({ isAbsolutePosition }) =>
-    isAbsolutePosition &&
-    `
+    isAbsolutePosition
+      ? `
     position: absolute;
     right: 0;
     padding: 0;
-    `};
+    `
+      : ``};
 `;
