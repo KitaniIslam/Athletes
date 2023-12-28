@@ -6,7 +6,7 @@ import { NavbarPadding } from "@lib/Consts";
 import { useAppDispatch, useAppSelector } from "@store/index";
 import { setThemeAction } from "@store/slices/theme";
 import { theme } from "@theme/index";
-import { Button, Dropdown, Space, theme as antdTheme } from "antd";
+import { Dropdown, Space, theme as antdTheme } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -85,17 +85,16 @@ const Navbar = () => {
   return (
     <div>
       <NavbarContainer isDark={currentTheme === "dark"}>
-        <Button
-          type="link"
+        <div
           onClick={() => router.push("/")}
           style={{
             marginLeft: `${NavbarPadding}px`,
-            color:
-              theme.colors[currentTheme === "dark" ? "black" : "white"][100],
+            color: theme.colors.white[100],
+            cursor: "pointer",
           }}
         >
-          SpotMe
-        </Button>
+          <h1 style={{ fontSize: 26, letterSpacing: 1 }}>SpotMe</h1>
+        </div>
         <LogoContainer>
           <Logo
             width={40}
