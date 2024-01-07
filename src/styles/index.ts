@@ -1,20 +1,17 @@
 import type { ThemeConfig } from "antd";
 
-export const antdTheme: ThemeConfig = {
-  token: {
-    fontFamily: "var(--font-lato)",
-  },
-};
-
 export const theme = {
   colors: {
     black: {
-      100: "#000000",
+      100: "#111111",
       90: "#1E1E1E",
       80: "#2C2C2C",
     },
     white: {
-      100: "#ffffff",
+      100: "#F2F2F2",
+    },
+    success: {
+      100: "#2ecc71",
     },
     gray: {
       900: "#101828",
@@ -35,5 +32,18 @@ export const theme = {
   },
   spacing: {
     maxWidth: "80dvw",
+  },
+};
+
+export const antdTheme: ThemeConfig = {
+  token: {
+    fontFamily: "var(--font-lato)",
+    colorPrimary: theme.colors.primary[100],
+  },
+  components: {
+    Segmented: {
+      itemSelectedBg: theme.colors.primary[100],
+      itemSelectedColor: theme.colors.white[100],
+    },
   },
 };

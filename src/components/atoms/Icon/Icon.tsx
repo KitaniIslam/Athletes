@@ -11,7 +11,7 @@ interface IconProps {
   padding?: number;
   onPress?: () => void;
   customHeight?: number;
-  isAbsolutePosition?: boolean;
+  absolute?: boolean;
 }
 
 const Icon = ({
@@ -21,7 +21,7 @@ const Icon = ({
   onPress,
   size = 24,
   color = theme.colors.gray[900],
-  isAbsolutePosition = false,
+  absolute = false,
 }: IconProps) => {
   const CurrentIcon = Icons[name];
 
@@ -31,7 +31,7 @@ const Icon = ({
       disabled={!onPress}
       pressable={!!onPress}
       padding={padding}
-      isAbsolutePosition={isAbsolutePosition}
+      absolute={absolute}
     >
       <CurrentIcon
         width={size}
