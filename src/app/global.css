@@ -3,6 +3,11 @@ html {
   max-width: 100vw;
   overflow-x: hidden;
   margin: 0;
+  padding: 0;
+}
+
+body {
+  display: -webkit-box;
 }
 
 html {
@@ -16,4 +21,13 @@ h1 {
 
 p {
   margin: 0;
+}
+
+div {
+  background-color: transparent;
+  overflow-x: initial;
+}
+
+::-webkit-scrollbar {
+  display: none;
 }
