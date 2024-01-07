@@ -89,7 +89,7 @@ const Navbar = () => {
           onClick={() => router.push("/")}
           style={{
             marginLeft: `${NavbarPadding}px`,
-            color: theme.colors.white[100],
+            color: theme.colors.primary[100],
             cursor: "pointer",
           }}
         >
@@ -145,7 +145,10 @@ const Navbar = () => {
                     <div style={{ marginRight: 10 }}>
                       <Icon name="LogIn" color={theme.colors.white[100]} />
                     </div>
-                    <Link href="/" style={{ color: theme.colors.white[100] }}>
+                    <Link
+                      href="/links"
+                      style={{ color: theme.colors.white[100] }}
+                    >
                       REGISTER
                     </Link>
                   </MenuButton>
