@@ -4,7 +4,7 @@ interface IconContainerProps {
   pressable?: boolean;
   disabled?: boolean;
   padding?: number;
-  isAbsolutePosition?: boolean;
+  absolute?: boolean;
 }
 
 export const IconContainer = styled.div<IconContainerProps>`
@@ -13,8 +13,8 @@ export const IconContainer = styled.div<IconContainerProps>`
   justify-content: center;
   padding: ${({ pressable, padding }) =>
     typeof padding === "number" ? `${padding}px` : pressable ? "8px" : "0px"};
-  ${({ isAbsolutePosition }) =>
-    isAbsolutePosition
+  ${({ absolute }) =>
+    absolute
       ? `
     position: absolute;
     right: 0;
