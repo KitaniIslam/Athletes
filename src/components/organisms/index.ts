@@ -1,3 +1,4 @@
+import CreatePlanConfigModal from "./CreatePlanConfig/CreatePlanConfigModal";
 import Hero from "./Hero/Hero";
 
-export { Hero };
+export { CreatePlanConfigModal, Hero };
