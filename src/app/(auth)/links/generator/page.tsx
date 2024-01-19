@@ -1,118 +1,30 @@
 "use client";
 
 import { ContentContainer, Icon } from "@components/atoms";
-import { theme } from "@theme/index";
-import { TPlanObj, TreeWorkoutPlanGenerator } from "@utils/functions";
-import { Breadcrumb, Button, Col, Drawer, FloatButton, Row, Space } from "antd";
+import { ExerciseBuilder, WorkoutPlanTree } from "@components/organisms";
+import {
+  DragDropContext,
+  Draggable,
+  DropResult,
+  Droppable,
+} from "@hello-pangea/dnd";
+import { Breadcrumb, Col, FloatButton, Row } from "antd";
 import { useState } from "react";
 
+// TODO: Make time schedule Store
 const months = 2;
 const weeks = 3;
 const days = 3;
 
-const onSelect = (item: any) => {
-  console.log("selected", item);
-};
+const data = [
+  { id: "item-0", title: "Item 0" },
+  { id: "item-1", title: "Item 1" },
+  { id: "item-2", title: "Item 2" },
+  { id: "item-3", title: "Item 3" },
+];
 
-const renderItems = (data: TPlanObj[]) => {
-  return (
-    <div>
-      {data.map((item) => (
-        <div
-          key={item.key}
-          style={{ margin: 10 }}
-          onClick={() => {
-            onSelect(item);
-          }}
-        >
-          {item.type === "month" ? (
-            <div
-              style={{
-                padding: "10px 20px 10px 10px",
-                borderRadius: 30,
-                backgroundColor: theme.colors.primary[100],
-                color: theme.colors.white[100],
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <Icon
-                name="Add"
-                size={20}
-                color={theme.colors.white[100]}
-                onPress={() => {}}
-              />
-              <p>{item.title}</p>
-            </div>
-          ) : item.type === "week" ? (
-            <div
-              style={{
-                padding: "10px 20px",
-                borderRadius: 30,
-                backgroundColor: !months
-                  ? theme.colors.primary[100]
-                  : "transparent",
-                color: !months
-                  ? theme.colors.white[100]
-                  : theme.colors.primary[100],
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <Icon
-                name="Add"
-                size={20}
-                color={theme.colors.gray[500]}
-                onPress={() => {}}
-              />
-              <h3>{item.title}</h3>
-            </div>
-          ) : (
-            <div
-              style={{
-                paddingLeft: 20,
-                paddingBottom: 10,
-                borderRadius: 30,
-                cursor: "pointer",
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                }}
-              >
-                <div style={{ marginRight: 6 }}>
-                  <Icon
-                    name="Ellipse"
-                    size={18}
-                    color={theme.colors.gray[500]}
-                  />
-                </div>
-                <p style={{ color: theme.colors.gray[500] }}>{item.title}</p>
-              </div>
-              <Icon
-                name="ArrowForward"
-                size={18}
-                color={theme.colors.gray[400]}
-              />
-            </div>
-          )}
-          {item.children ? renderItems(item.children) : null}
-        </div>
-      ))}
-    </div>
-  );
-};
-
-const treeData = TreeWorkoutPlanGenerator({ months, weeks, days });
-console.log("🚀 ~ file: page.tsx:120 ~ treeData:", treeData);
 interface IGenerator {}
+
 const Generator = ({}: IGenerator) => {
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
@@ -121,6 +33,20 @@ const Generator = ({}: IGenerator) => {
 
   const onClose = () => {
     setOpen(false);
+  };
+
+  const onDragEnd = (event: DropResult) => {
+    const { destination, source, draggableId } = event;
+    if (!destination) {
+      return;
+    }
+    if (
+      destination.index === source.index &&
+      destination.droppableId === source.droppableId
+    ) {
+      return;
+    }
+    // TODO: Switch order
   };
 
   return (
@@ -149,6 +75,39 @@ const Generator = ({}: IGenerator) => {
                 ]}
               />
             </Col>
+            <Col span={24} style={{ padding: 0 }}>
+              <div style={{ marginTop: 30 }}>
+                <div />
+                <DragDropContext onDragEnd={onDragEnd}>
+                  <Droppable droppableId="droppable-0" key="droppable-0">
+                    {(provided) => (
+                      <div {...provided.droppableProps} ref={provided.innerRef}>
+                        {data?.map((item, index) => (
+                          <Draggable
+                            key={item.id}
+                            draggableId={item.id.toString()}
+                            index={index}
+                          >
+                            {(provided) => (
+                              <div
+                                key={index}
+                                {...provided.dragHandleProps}
+                                {...provided.draggableProps}
+                                ref={provided.innerRef}
+                              >
+                                <ExerciseBuilder text={item.title} />
+                              </div>
+                            )}
+                          </Draggable>
+                        ))}
+
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                </DragDropContext>
+              </div>
+            </Col>
           </Row>
         </div>
         <FloatButton.Group shape="square" style={{ right: 70 }} type="primary">
@@ -157,22 +116,12 @@ const Generator = ({}: IGenerator) => {
           <FloatButton icon={<Icon name="Tree" />} onClick={showDrawer} />
           <FloatButton icon={<Icon name="Share" />} />
         </FloatButton.Group>
-        <Drawer
-          title="Preview"
-          placement="right"
+        <WorkoutPlanTree
+          schedule={{ days, months, weeks }}
+          isOpen={open}
           onClose={onClose}
-          open={open}
-          extra={
-            <Space>
-              <Button onClick={onClose}>Reset</Button>
-              <Button type="primary" onClick={onClose}>
-                Share
-              </Button>
-            </Space>
-          }
-        >
-          {renderItems(treeData)}
-        </Drawer>
+          onSelect={() => {}}
+        />
       </div>
     </ContentContainer>
   );
