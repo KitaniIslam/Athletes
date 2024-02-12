@@ -1,6 +1,6 @@
 "use client";
 
-import { ContentContainer, Icon } from "@components/atoms";
+import { AddExerciseButton, ContentContainer, Icon } from "@components/atoms";
 import { ExerciseBuilder, WorkoutPlanTree } from "@components/organisms";
 import {
   DragDropContext,
@@ -8,7 +8,7 @@ import {
   DropResult,
   Droppable,
 } from "@hello-pangea/dnd";
-import { Breadcrumb, Col, FloatButton, Row } from "antd";
+import { Breadcrumb, Col, FloatButton, Input, Row } from "antd";
 import { useState } from "react";
 
 // TODO: Make time schedule Store
@@ -17,10 +17,8 @@ const weeks = 3;
 const days = 3;
 
 const data = [
-  { id: "item-0", title: "Item 0" },
-  { id: "item-1", title: "Item 1" },
-  { id: "item-2", title: "Item 2" },
-  { id: "item-3", title: "Item 3" },
+  { id: "item-0", title: "Item 0", isCombain: false },
+  { id: "item-1", title: "Item 1", isCombain: true },
 ];
 
 interface IGenerator {}
@@ -54,11 +52,16 @@ const Generator = ({}: IGenerator) => {
       <div>
         <div
           style={{
-            padding: "20px 70px",
+            padding: "20px 20px",
             borderRadius: 30,
           }}
         >
           <Row gutter={16}>
+            <Input
+              placeholder="Exercises Day name"
+              bordered={false}
+              style={{ fontSize: "2rem", padding: 0 }}
+            />
             <Col span={12}>
               <Breadcrumb
                 separator=">"
@@ -88,14 +91,22 @@ const Generator = ({}: IGenerator) => {
                             draggableId={item.id.toString()}
                             index={index}
                           >
-                            {(provided) => (
+                            {(provided, snapshot) => (
                               <div
                                 key={index}
                                 {...provided.dragHandleProps}
                                 {...provided.draggableProps}
                                 ref={provided.innerRef}
+                                style={{
+                                  ...provided.draggableProps.style,
+                                  marginBottom: 15,
+                                }}
                               >
-                                <ExerciseBuilder text={item.title} />
+                                <ExerciseBuilder
+                                  text={item.title}
+                                  isCombain={item.isCombain}
+                                  isDragging={snapshot.isDragging}
+                                />
                               </div>
                             )}
                           </Draggable>
@@ -106,6 +117,7 @@ const Generator = ({}: IGenerator) => {
                     )}
                   </Droppable>
                 </DragDropContext>
+                <AddExerciseButton label="Add Exercise" />
               </div>
             </Col>
           </Row>
